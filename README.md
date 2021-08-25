@@ -1,1 +1,1 @@
-# timeControl
+# Time control
