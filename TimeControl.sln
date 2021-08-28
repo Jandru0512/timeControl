@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31613.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeControl.Common", "TimeControl.Common\TimeControl.Common.csproj", "{47AA4380-2380-40B3-9A67-312686B1F809}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeControl.Tests", "TimeControl.Tests\TimeControl.Tests.csproj", "{AA8ACB8A-0AAE-4161-B27D-00684A4A53C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeControl.Tests", "TimeControl.Tests\TimeControl.Tests.csproj", "{AA8ACB8A-0AAE-4161-B27D-00684A4A53C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeControl.Functions", "TimeControl.Functions\TimeControl.Functions.csproj", "{C21608D4-B681-4CE4-8B6D-162EB142A89C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeControl.Functions", "TimeControl.Functions\TimeControl.Functions.csproj", "{C21608D4-B681-4CE4-8B6D-162EB142A89C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
