@@ -20,7 +20,7 @@ namespace TimeControl.Functions
             [Table("record", Connection = "AzureWebJobsStorage")] CloudTable recordTable,
             ILogger log)
         {
-            log.LogInformation("Received a new record.");
+            log.LogInformation("Received a new time record.");
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             Record record = JsonConvert.DeserializeObject<Record>(requestBody);
@@ -39,11 +39,11 @@ namespace TimeControl.Functions
                 return new BadRequestObjectResult(new Response
                 {
                     IsSuccess = false,
-                    Message = "The record must have a valid type."
+                    Message = "The time record must have a valid type."
                 });
             }
 
-            RecordEntity todoEntity = new RecordEntity
+            RecordEntity recordEntity = new RecordEntity
             {
                 Consolidated = false,
                 CreatedAt = DateTime.UtcNow,
@@ -54,17 +54,92 @@ namespace TimeControl.Functions
                 Type = record.Type
             };
 
-            TableOperation addOperation = TableOperation.Insert(todoEntity);
+            TableOperation addOperation = TableOperation.Insert(recordEntity);
             await recordTable.ExecuteAsync(addOperation);
 
-            string message = "New record stored in table.";
+            string message = "New time record stored in table.";
             log.LogInformation(message);
 
             return new OkObjectResult(new Response
             {
                 IsSuccess = true,
                 Message = message,
-                Result = todoEntity
+                Result = recordEntity
+            });
+        }
+
+        [FunctionName(nameof(Update))]
+        public static async Task<IActionResult> Update(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "timeControl/{id}")] HttpRequest req,
+            [Table("record", Connection = "AzureWebJobsStorage")] CloudTable recordTable,
+            string id,
+            ILogger log)
+        {
+            log.LogInformation($"Received an update for {id} time record.");
+
+            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            Record record = JsonConvert.DeserializeObject<Record>(requestBody);
+
+            // Validate record id
+            TableOperation findOperation = TableOperation.Retrieve<RecordEntity>("RECORD", id);
+            TableResult findResult = await recordTable.ExecuteAsync(findOperation);
+
+            if (findResult.Result == null)
+            {
+                return new BadRequestObjectResult(new Response
+                {
+                    IsSuccess = false,
+                    Message = "Time record not found."
+                });
+            }
+
+            // Update entity
+            RecordEntity recordEntity = (RecordEntity)findResult.Result;
+            recordEntity.Consolidated = record.Consolidated;
+            if (record.EmployeeId != 0)
+            {
+                recordEntity.EmployeeId = record.EmployeeId;
+            }
+
+            if (Enum.IsDefined(typeof(RecordTypes), record.Type))
+            {
+                recordEntity.Type = record.Type;
+            }
+
+            TableOperation updateOperation = TableOperation.Replace(recordEntity);
+            await recordTable.ExecuteAsync(updateOperation);
+
+            string message = $"Time record: {id} updated in table.";
+            log.LogInformation(message);
+
+            return new OkObjectResult(new Response
+            {
+                IsSuccess = true,
+                Message = message,
+                Result = recordEntity
+            });
+        }
+
+
+        [FunctionName(nameof(List))]
+        public static async Task<IActionResult> List(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "timeControl")] HttpRequest req,
+            [Table("record", Connection = "AzureWebJobsStorage")] CloudTable recordTable,
+            ILogger log)
+        {
+            log.LogInformation("List records.");
+
+            TableQuery<RecordEntity> query = new TableQuery<RecordEntity>();
+            TableQuerySegment<RecordEntity> records = await recordTable.ExecuteQuerySegmentedAsync(query, null);
+
+            string message = "Retrieved all time records.";
+            log.LogInformation(message);
+
+            return new OkObjectResult(new Response
+            {
+                IsSuccess = true,
+                Message = message,
+                Result = records
             });
         }
     }
