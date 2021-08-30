@@ -25,6 +25,32 @@ namespace TimeControl.Tests
                 Type = 0
             };
         }
+        public static RecordEntity[] GetRecordsEntity()
+        {
+            return new RecordEntity[]
+            {
+                new RecordEntity
+                {
+                    Consolidated = false,
+                    CreatedAt = DateTime.UtcNow,
+                    EmployeeId = 2,
+                    ETag = "*",
+                    PartitionKey = "RECORD",
+                    RowKey = Guid.NewGuid().ToString(),
+                    Type = 0
+                },
+                new RecordEntity
+                {
+                    Consolidated = false,
+                    CreatedAt = DateTime.UtcNow,
+                    EmployeeId = 2,
+                    ETag = "*",
+                    PartitionKey = "RECORD",
+                    RowKey = Guid.NewGuid().ToString(),
+                    Type = 1
+                }
+            };
+        }
 
         public static DefaultHttpRequest CreateHttpRequest(Guid id, Record recordRequest)
         {
@@ -53,6 +79,15 @@ namespace TimeControl.Tests
             };
         }
 
+        public static DefaultHttpRequest CreateHttpRequest(Record[] recordRequest)
+        {
+            string request = JsonConvert.SerializeObject(recordRequest, Formatting.Indented);
+            return new DefaultHttpRequest(new DefaultHttpContext())
+            {
+                Body = GenerateStreamFromString(request)
+            };
+        }
+
         public static DefaultHttpRequest CreateHttpRequest()
         {
             return new DefaultHttpRequest(new DefaultHttpContext());
@@ -66,6 +101,25 @@ namespace TimeControl.Tests
                 CreatedAt = DateTime.UtcNow,
                 EmployeeId = 1,
                 Type = 1
+            };
+        }
+
+        public static Record[] GetRecordsRequest()
+        {
+            return new Record[]
+            {
+                new Record {
+                    Consolidated = false,
+                    CreatedAt = DateTime.UtcNow,
+                    EmployeeId = 1,
+                    Type = 0
+                },
+                new Record {
+                    Consolidated = false,
+                    CreatedAt = DateTime.UtcNow,
+                    EmployeeId = 1 ,
+                    Type =1
+                }
             };
         }
 

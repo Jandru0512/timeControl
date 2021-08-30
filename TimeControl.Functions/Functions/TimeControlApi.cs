@@ -106,6 +106,11 @@ namespace TimeControl.Functions
                 recordEntity.Type = record.Type;
             }
 
+            if (record.CreatedAt > DateTime.MinValue)
+            {
+                recordEntity.CreatedAt = record.CreatedAt.ToUniversalTime();
+            }
+
             TableOperation updateOperation = TableOperation.Replace(recordEntity);
             await recordTable.ExecuteAsync(updateOperation);
 
