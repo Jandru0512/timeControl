@@ -13,6 +13,42 @@ namespace TimeControl.Tests
 {
     public class TestFactory
     {
+        public static ConsolidatedEntity GetConsolidatedEntity()
+        {
+            return new ConsolidatedEntity
+            {
+                Date = DateTime.UtcNow,
+                Minutes = 15,
+                EmployeeId = 1,
+                ETag = "*",
+                PartitionKey = "CONSOLIDATED",
+                RowKey = Guid.NewGuid().ToString()
+            };
+        }
+        public static List<ConsolidatedEntity> GetConsolidatedsEntity()
+        {
+            return new List<ConsolidatedEntity>
+            {
+                new ConsolidatedEntity
+                {
+                    Date = DateTime.UtcNow,
+                    Minutes = 20,
+                    EmployeeId = 1,
+                    ETag = "*",
+                    PartitionKey = "CONSOLIDATED",
+                    RowKey = Guid.NewGuid().ToString()
+                },
+                new ConsolidatedEntity
+                {
+                    Date = DateTime.UtcNow,
+                    Minutes = 45,
+                    EmployeeId = 2,
+                    ETag = "*",
+                    PartitionKey = "CONSOLIDATED",
+                    RowKey = Guid.NewGuid().ToString()
+                }
+            };
+        }
         public static RecordEntity GetRecordEntity()
         {
             return new RecordEntity
@@ -89,11 +125,68 @@ namespace TimeControl.Tests
             };
         }
 
+        public static DefaultHttpRequest CreateHttpRequest(Guid id, Consolidated recordRequest)
+        {
+            string request = JsonConvert.SerializeObject(recordRequest);
+            return new DefaultHttpRequest(new DefaultHttpContext())
+            {
+                Body = GenerateStreamFromString(request),
+                Path = $"/{id}"
+            };
+        }
+
+        public static DefaultHttpRequest CreateHttpRequest(Consolidated recordRequest)
+        {
+            string request = JsonConvert.SerializeObject(recordRequest);
+            return new DefaultHttpRequest(new DefaultHttpContext())
+            {
+                Body = GenerateStreamFromString(request)
+            };
+        }
+
+        public static DefaultHttpRequest CreateHttpRequest(List<Consolidated> recordRequest)
+        {
+            string request = JsonConvert.SerializeObject(recordRequest, Formatting.Indented);
+            return new DefaultHttpRequest(new DefaultHttpContext())
+            {
+                Body = GenerateStreamFromString(request)
+            };
+        }
+
         public static DefaultHttpRequest CreateHttpRequest()
         {
             return new DefaultHttpRequest(new DefaultHttpContext());
         }
 
+        public static Consolidated GetConsolidatedRequest()
+        {
+            return new Consolidated
+            {
+                Date = DateTime.UtcNow,
+                Minutes = 15,
+                EmployeeId = 1,
+            };
+        }
+
+        public static List<Consolidated> GetConsolidatedsRequest()
+        {
+            return new List<Consolidated>
+            {
+                new Consolidated
+                {
+                    Date = DateTime.UtcNow,
+                    Minutes = 20,
+                    EmployeeId = 1
+                },
+                new Consolidated
+                {
+                    Date = DateTime.UtcNow,
+                    Minutes = 45,
+                    EmployeeId = 2
+                }
+            };
+        }
+        
         public static Record GetRecordRequest()
         {
             return new Record
