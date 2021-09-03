@@ -52,7 +52,7 @@ namespace TimeControl.Tests
         {
             // Arrange
             MockCloudTableRecord mockRecord = new MockCloudTableRecord(new Uri("http://127.0.0.1:10002/devstoreaccount1/reports"));
-            Common.Record[] records = TestFactory.GetRecordsRequest();
+            List<Common.Record> records = TestFactory.GetRecordsRequest();
             DefaultHttpRequest request = TestFactory.CreateHttpRequest(records);
 
             // Act

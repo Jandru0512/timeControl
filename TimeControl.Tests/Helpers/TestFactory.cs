@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using TimeControl.Common;
 using TimeControl.Functions;
@@ -25,9 +26,9 @@ namespace TimeControl.Tests
                 Type = 0
             };
         }
-        public static RecordEntity[] GetRecordsEntity()
+        public static List<RecordEntity> GetRecordsEntity()
         {
-            return new RecordEntity[]
+            return new List<RecordEntity>
             {
                 new RecordEntity
                 {
@@ -79,7 +80,7 @@ namespace TimeControl.Tests
             };
         }
 
-        public static DefaultHttpRequest CreateHttpRequest(Record[] recordRequest)
+        public static DefaultHttpRequest CreateHttpRequest(List<Record> recordRequest)
         {
             string request = JsonConvert.SerializeObject(recordRequest, Formatting.Indented);
             return new DefaultHttpRequest(new DefaultHttpContext())
@@ -104,9 +105,9 @@ namespace TimeControl.Tests
             };
         }
 
-        public static Record[] GetRecordsRequest()
+        public static List<Record> GetRecordsRequest()
         {
-            return new Record[]
+            return new List<Record>
             {
                 new Record {
                     Consolidated = false,
