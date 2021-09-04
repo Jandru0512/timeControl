@@ -13,7 +13,7 @@ namespace TimeControl.Functions
     {
         [FunctionName("ConsolidatedJob")]
         public static async Task Run(
-            [TimerTrigger("0 */5 * * * *")] TimerInfo myTimer,
+            [TimerTrigger("0 */1 * * * *")] TimerInfo myTimer,
             [Table("record", Connection = "AzureWebJobsStorage")] CloudTable recordTable,
             [Table("consolidated", Connection = "AzureWebJobsStorage")] CloudTable consolidatedTable,
             ILogger log)

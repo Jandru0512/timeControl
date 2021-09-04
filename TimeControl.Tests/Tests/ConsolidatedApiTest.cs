@@ -24,7 +24,7 @@ namespace TimeControl.Tests
             DefaultHttpRequest request = TestFactory.CreateHttpRequest(records);
 
             // Act
-            IActionResult response = await ConsolidatedApi.Consolidateds(request, mockConsolidate, logger);
+            IActionResult response = await ConsolidatedApi.Consolidateds(request, mockConsolidate, "2021-09-04", logger);
 
             // Assert
             OkObjectResult result = (OkObjectResult)response;
